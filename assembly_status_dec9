@@ -1,0 +1,29 @@
+[chimp 23:42:24 ASSEMBLIES] ∫ fac */CA/10-gapclose/genome.ctg.fasta
+n       n:100      n:N50     min      median    mean       N50        max          sum
+912     912        122       305      2793      5351       10321      129376       4880524       M1-1S/CA/10-gapclose/genome.ctg.fasta
+1369    1369       26        312      1127      3349       23438      308390       4585765       M1-3S/CA/10-gapclose/genome.ctg.fasta
+333     333        17        303      712       8616       54621      185011       2869163       M6-3G/CA/10-gapclose/genome.ctg.fasta
+1316    1316       39        301      1293      3561       12645      221686       4687180       M7-1S/CA/10-gapclose/genome.ctg.fasta
+[chimp 23:42:29 ASSEMBLIES] ∫ fac  */CA/9-terminator/genome.ctg.fasta
+n       n:100      n:N50     min      median    mean       N50        max          sum
+182     182        20        303      2685      13802      43749      121674       2512039       Bim1-2/CA/9-terminator/genome.ctg.fasta
+170     170        22        364      5921      13787      33531      112607       2343924       GillExp13/CA/9-terminator/genome.ctg.fasta
+61      61         7         311      13459     40044      141528     277042       2442737       Gris1-3/CA/9-terminator/genome.ctg.fasta
+136     136        12        301      2579      18473      71779      150328       2512331       Gris1-6/CA/9-terminator/genome.ctg.fasta
+156     156        13        313      4456      18329      63521      208880       2859412       HK2/CA/9-terminator/genome.ctg.fasta
+88      88         8         340      4458      29660      113628     303339       2610156       HK3/CA/9-terminator/genome.ctg.fasta
+166     166        16        352      4749      17162      55341      187963       2848943       HK7/CA/9-terminator/genome.ctg.fasta
+156     156        9         301      1976      16498      68849      281014       2573747       HK9x/CA/9-terminator/genome.ctg.fasta
+169     169        22        322      6010      13843      32121      95609        2339557       Imp1-1/CA/9-terminator/genome.ctg.fasta
+105     105        18        384      16090     21392      40553      106371       2246238       Imp1-6/CA/9-terminator/genome.ctg.fasta
+912     912        122       305      2793      5351       10321      129376       4880524       M1-1S/CA/9-terminator/genome.ctg.fasta
+1370    1370       26        312      1129      3347       23438      308390       4585769       M1-3S/CA/9-terminator/genome.ctg.fasta
+2921    2921       253       309      1061      2195       3817       88537        6412229       M3-1G/CA/9-terminator/genome.ctg.fasta
+333     333        17        303      712       8616       54621      185011       2869163       M6-3G/CA/9-terminator/genome.ctg.fasta
+1317    1317       39        301      1293      3558       12645      221686       4687144       M7-1S/CA/9-terminator/genome.ctg.fasta
+704     704        266       300      392       438        429        5723         308626        MRS3-2/CA/9-terminator/genome.ctg.fasta
+66      66         9         309      16316     38762      100186     212924       2558349       P71S/CA/9-terminator/genome.ctg.fasta
+86      86         10        750      11155     29641      73969      231822       2549137       P78S/CA/9-terminator/genome.ctg.fasta
+28      28         4         308      9182      68883      191911     348639       1928735       wkB8/CA/9-terminator/genome.ctg.fasta
+57      57         4         335      6057      44209      158129     446048       2519935       wkB9/CA/9-terminator/genome.ctg.fasta
+[chimp 23:42:34 ASSEMBLIES] ∫ 
