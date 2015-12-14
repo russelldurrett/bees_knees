@@ -27,8 +27,8 @@ for sample in names:
 	sample_fastqs = [filename for filename in fastq_list if sample_name in filename]
 	#sample_fastqs = [f for f in sample_fastqs]
 	print 'found these fastqs: ' + ' '.join(sample_fastqs)
-	#Change pathway to get to your velvet directory and the directory where you want the interleaved sequences saved
-	args_str = '../tools/velvet_1.2.10/contrib/shuffleSequences_fasta/shuffleSequences_fastq.pl ' + ' '.join(sample_fastqs) + ' ../genomes_batch1_merged/' + str(sample_name) + '_merged.fastq'
+	#remove .gz if working with unzipped fastqs (or whatever file format), change pathway to get to your velvet directory and the directory where you want the interleaved sequences saved
+	args_str = '../tools/velvet_1.2.10/contrib/shuffleSequences_fasta/shuffleSequences_fastq.pl ' + ' '.join(sample_fastqs) + ' ../genomes_batch1_merged/' + str(sample_name) + '_merged.fastq.gz'
 	print args_str
 	args = str.split(args_str)
 	print args
