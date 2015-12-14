@@ -18,14 +18,11 @@ JELLYFISH_PATH=/home/rud2004/tools/MaSuRCA/MaSuRCA-1.9.4.CHIMP/bin
 SR_PATH=/home/rud2004/tools/MaSuRCA/MaSuRCA-1.9.4.CHIMP/bin
 CA_PATH=/home/rud2004/tools/MaSuRCA/MaSuRCA-1.9.4.CHIMP/CA/Linux-amd64/bin
 END
-
-
 DATA 
 """
 
 config_footer = """ 
 END
-
 PARAMETERS
 #this is k-mer size for deBruijn graph values between 25 and 101 are supported, auto will compute the optimal size based on the read data and GC content
 GRAPH_KMER_SIZE=auto
