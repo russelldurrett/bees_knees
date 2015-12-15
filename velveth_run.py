@@ -17,7 +17,7 @@ print 'working with these samples:'
 print names 
 
 #.fastq is working with fastqs (or whatever the format the sequence data is in), .gz if working with zipped files
-fastq_list = glob.glob('*.gz')
+fastq_list = glob.glob('*.fastq')
 print 'All fastq files:'
 print fastq_list
 
@@ -32,8 +32,8 @@ for sample in names:
 	# The number in the third part of the string is the kmer length and can be changed (if testing multiple kmer lengths it would be worth it to include a identifier on the directory name)
 	# This could be done by adding + '_95' after the first str(sample+name)
 	# The rest of the third part of the string is velveth options which can be changed at will, just makes sure the sections begins and ends with a space
-	# Remove .gz if working with unzipped fastqs (or whatever file format) from the part of the string sequence
-	args_str = '../tools/velvet_1.2.10/velveth ' + str(sample_name) + ' 95 -fastq.gz -shortPaired ' + str(sample_name) + '_merged.fastq.gz'
+	# Add .gz if working with unzipped fastqs (or whatever file format) from the part of the string sequence
+	args_str = '../tools/velvet_1.2.10/velveth ' + str(sample_name) + ' 95 -fastq.gz -shortPaired ' + str(sample_name) + '_merged.fastq'
 	print args_str
 	args = str.split(args_str)
 	print args

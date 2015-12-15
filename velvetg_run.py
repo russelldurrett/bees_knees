@@ -18,7 +18,7 @@ print 'working with these samples:'
 print names 
 
 #.fastq is working with fastqs (or whatever the format the sequence data is in), .gz if working with zipped files
-fastq_list = glob.glob('*.gz')
+fastq_list = glob.glob('*.fastq')
 print 'All fastq files:'
 print fastq_list
 
