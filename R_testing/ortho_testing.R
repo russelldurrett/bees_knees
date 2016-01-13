@@ -14,8 +14,8 @@ setwd('/Users/dvanderwood/Github/bees_knees/R_testing/')
 
 ###*****************************
 # INSTALL LIBRARIES
-library("dplyr")
-library("tidyr")
+library('dplyr')
+library('tidyr')
 library('stringr')
 ###*****************************
 
@@ -47,7 +47,7 @@ input_groups = read.table(file = filename,
               fill = TRUE)
 
 
-#rename rows
+#rename rows, assuming the first row is what you want to rename the rows to
 rnames <- input_groups[,1]
 rownames(input_groups) <- rnames
 input_groups$X1 <-NULL
@@ -81,11 +81,26 @@ for (x in 1:species_number){
 #combine data frames into one for each for species, showing every row where the species is present
 for (x in 1:species_number){
   combined_data_frame = paste0(x,'_species_orthologs_combined')
-  data_frame_list = c()
-  for (i in 1:(gene_number)){
-    first_data_frame = paste0('species_ortholog_rows_',x,'_',i)
-    data_frame_list = c(data_frame_list, first_data_frame)
+  combined_data_frame_r = paste0(x,'_species_orthologs_combined_reduced')
+  #data_frame_list = c()
+  list_1 <- get(paste0('species_ortholog_rows_',x,'_1'))
+  list_2 <- get(paste0('species_ortholog_rows_',x,'_2'))
+  assign(combined_data_frame, rbind(list_1, list_2))
+  for (i in 3:(gene_number)){
+    new_data_frame = get(paste0('species_ortholog_rows_',x,'_',i))
+    #data_frame_list = c(data_frame_list, first_data_frame)
+    old_data_frame = get(combined_data_frame)
+    assign(combined_data_frame, rbind(old_data_frame, new_data_frame))
   }
+  final_list <- get(combined_data_frame)
+  final_list <- add_rownames(final_list, "rn")
+  final_list <- final_list[grep(':$', final_list[['rn']]), ]
+  
+  rnames_final_list <- final_list$rn
+  rownames(final_list) <- rnames_final_list
+  final_list$rn <-NULL
+  
+  assign(combined_data_frame_r, final_list)
 }
 
 
