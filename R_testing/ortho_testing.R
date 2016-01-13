@@ -15,8 +15,10 @@ setwd('/Users/dvanderwood/Github/bees_knees/R_testing/')
 ###*****************************
 # INSTALL LIBRARIES
 library('dplyr')
+library('plyr')
 library('tidyr')
 library('stringr')
+library('ggplot2')
 ###*****************************
 
 
@@ -29,6 +31,9 @@ species = 'bacteroidetes'
 
 #assembly? - masurca - velvet -
 assembly = 'masurca'
+
+#Max number of orthologous genes?
+max_genes = 36
 ###*****************************
 
 
@@ -43,7 +48,7 @@ conversion_table = read.csv('rast_ids.csv',
 filename = paste0(species,'_jan11/OrthologousGroups.txt')
 
 input_groups = read.table(file = filename,
-              col.names = 1:37,
+              col.names = 1:(max_genes+1),
               fill = TRUE)
 
 
@@ -53,7 +58,7 @@ rownames(input_groups) <- rnames
 input_groups$X1 <-NULL
 
 #rename columns
-for (i in 1:36){
+for (i in 1:max_genes){ 
   name  = paste0('gene_',
                  i)
   colnames(input_groups)[i] <- name
@@ -66,9 +71,13 @@ assembly_delim = paste0('_',str_sub(assembly,1,1))
 conversion_subset <- conversion_subset[grep(assembly_delim, conversion_subset$sample_id), ]
 ###*****************************
 
+
+###*****************************
+#CREATE DATA FRAMES SHOWING WHAT ORTHOLOGOUS GENES ARE PRESENT FOR EVERY SPECIES AND OF HOW MANY SPECIES CONTAIN EACH ORTHOLOGOUS GENE
+
 #find rows where each species is present
 species_number = nrow(conversion_subset)
-gene_number = ncol(input_groups)
+gene_number = ncol(input_groups) #should be equal to max_genes
 for (x in 1:species_number){
   for (i in 1:gene_number){
     gene_id_call = paste0('gene_',i)
@@ -78,10 +87,11 @@ for (x in 1:species_number){
   }
 }
 
-#combine data frames into one for each for species, showing every row where the species is present
+#combine data frames into one for each for species, showing every row (from the input file) where the species is present
 for (x in 1:species_number){
   combined_data_frame = paste0(x,'_species_orthologs_combined')
   combined_data_frame_r = paste0(x,'_species_orthologs_combined_reduced')
+  combined_data_frame_r_rn = paste0(x,'_species_orthologs_combined_reduced_rn')
   #data_frame_list = c()
   list_1 <- get(paste0('species_ortholog_rows_',x,'_1'))
   list_2 <- get(paste0('species_ortholog_rows_',x,'_2'))
@@ -96,12 +106,52 @@ for (x in 1:species_number){
   final_list <- add_rownames(final_list, "rn")
   final_list <- final_list[grep(':$', final_list[['rn']]), ]
   
+  assign(combined_data_frame_r_rn, final_list) #Make a data frame with row names as a column named rn
+  
   rnames_final_list <- final_list$rn
   rownames(final_list) <- rnames_final_list
   final_list$rn <-NULL
   
-  assign(combined_data_frame_r, final_list)
+  assign(combined_data_frame_r, final_list) #make a data frame of all rows were the certain species has a gene present with row names
 }
+
+df = do.call(what=rbind,args=mget(paste0(1:species_number,"_species_orthologs_combined_reduced_rn")))
+test = ddply(.data=df,.variables=colnames(df),.fun=nrow)
+for (j in 1:gene_number){
+  col_removal = paste0('gene_',j)
+  test[col_removal] <-NULL
+}
+
+assign('gene_occurence_df', test) #data frame where an orthologous gene is next to the number of species which contain that gene
+
+###*****************************
+
+###*****************************
+#DATA FRAMES SHOWING NUMBER OF GENES THAT ARE SHARED BY A CERTAIN NUMBER SPECIES
+occurence_list = c()
+shared_num_list = c()
+
+for (k in 1:species_number){
+  assign(paste0(k,'_gene_occurence_df'), filter(gene_occurence_df, V1 == k))
+  assign(paste0(k,'_occurences'), nrow(get(paste0(k,'_gene_occurence_df'))))
+  conversion_var = get(paste0(k,'_occurences'))
+  shared_num_list = c(shared_num_list, k)
+  occurence_list = c(occurence_list, conversion_var)
+}
+
+genes_in_species_df = data.frame(shared_num_list, occurence_list) #data frame showing how many genes are shared by any number of of the species
+###*****************************
+
+
+###*****************************
+#FIGURE CONSTRUCTION
+ggplot(gene_occurence_df, aes(factor(V1))) + geom_bar() + ggtitle('Shared Genes') + labs(x = 'Number of Species', y = 'Number of Genes')
+
+###*****************************
+
+
+
+
 
 
 
