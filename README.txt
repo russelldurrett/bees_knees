@@ -9,6 +9,7 @@ Construct sample lists:
 		ls | cut -d'_' -f 1 | sort | uniq -d > sample_list.txt
 
 	This keeps everything in the file name before the first underscore, if you wanted the first two, change "-f 1" to "-f 1,2" It will be necessary to open this file and delete the line which contains the simply sample (created because the the sample_list.txt is in the folder). This can be done with a text editor or the vim command if working on a console.
+	sample_list.txt is present as an example.
 
 
 MaSuRCA

@@ -27,13 +27,13 @@ library('ggplot2')
 # INITIAL INPUTS
 
 #Species to work on? - bacteroidetes - gilliamella - snogdrassella - unknown -
-species = 'bacteroidetes'
+species = 'gilliamella'
+
+#Data OrthoFinder was run? - jan11 - etc -
+date = 'jan11'
 
 #assembly? - masurca - velvet -
 assembly = 'masurca'
-
-#Max number of orthologous genes?
-max_genes = 36
 ###*****************************
 
 
@@ -45,12 +45,13 @@ conversion_table = read.csv('rast_ids.csv',
                             header = TRUE)
 
 #upload orthologs
-filename = paste0(species,'_jan11/OrthologousGroups.txt')
+filename = paste0(species,'_',assembly,'_',date,'/OrthologousGroups.txt')
 
+
+max_genes <- max(count.fields(filename))
 input_groups = read.table(file = filename,
-              col.names = 1:(max_genes+1),
+              col.names = 1:max_genes, 
               fill = TRUE)
-
 
 #rename rows, assuming the first row is what you want to rename the rows to
 rnames <- input_groups[,1]
@@ -58,7 +59,7 @@ rownames(input_groups) <- rnames
 input_groups$X1 <-NULL
 
 #rename columns
-for (i in 1:max_genes){ 
+for (i in 1:max_genes-1){ 
   name  = paste0('gene_',
                  i)
   colnames(input_groups)[i] <- name
@@ -103,24 +104,28 @@ for (x in 1:species_number){
     assign(combined_data_frame, rbind(old_data_frame, new_data_frame))
   }
   final_list <- get(combined_data_frame)
-  final_list <- add_rownames(final_list, "rn")
-  final_list <- final_list[grep(':$', final_list[['rn']]), ]
+  final_list <- add_rownames(final_list, "rn") #move the row names to a column named rn
+  final_list <- final_list[grep(':$', final_list[['rn']]), ]#remove rows which are repeated (Genes within a species are orthologous)
   
   assign(combined_data_frame_r_rn, final_list) #Make a data frame with row names as a column named rn
   
-  rnames_final_list <- final_list$rn
+  rnames_final_list <- final_list$rn # Next 4 lines change the column rn back into row names and saves it
   rownames(final_list) <- rnames_final_list
   final_list$rn <-NULL
   
   assign(combined_data_frame_r, final_list) #make a data frame of all rows were the certain species has a gene present with row names
 }
 
-df = do.call(what=rbind,args=mget(paste0(1:species_number,"_species_orthologs_combined_reduced_rn")))
-test = ddply(.data=df,.variables=colnames(df),.fun=nrow)
-for (j in 1:gene_number){
+df = do.call(what=rbind,args=mget(paste0(1:species_number,"_species_orthologs_combined_reduced_rn")))#combine all the species data frames into one
+
+for (j in 1:gene_number){ #Remove gene columns, they make the data frame very large which can causes problems for the ddply function and are not needed
   col_removal = paste0('gene_',j)
-  test[col_removal] <-NULL
+  df[col_removal] <-NULL
 }
+
+test = ddply(.data=df,.variables=colnames(df),.fun=nrow) #Count and then remove repeated orthologs
+
+
 
 assign('gene_occurence_df', test) #data frame where an orthologous gene is next to the number of species which contain that gene
 
@@ -132,7 +137,7 @@ occurence_list = c()
 shared_num_list = c()
 
 for (k in 1:species_number){
-  assign(paste0(k,'_gene_occurence_df'), filter(gene_occurence_df, V1 == k))
+  assign(paste0(k,'_gene_occurence_df'), filter(gene_occurence_df, V1 == k)) #Creates data frame showing each gene that is shared by 1,2,3,etc species
   assign(paste0(k,'_occurences'), nrow(get(paste0(k,'_gene_occurence_df'))))
   conversion_var = get(paste0(k,'_occurences'))
   shared_num_list = c(shared_num_list, k)
@@ -145,12 +150,23 @@ genes_in_species_df = data.frame(shared_num_list, occurence_list) #data frame sh
 
 ###*****************************
 #FIGURE CONSTRUCTION
-ggplot(gene_occurence_df, aes(factor(V1))) + geom_bar() + ggtitle('Shared Genes') + labs(x = 'Number of Species', y = 'Number of Genes')
-
+plot01 = ggplot(gene_occurence_df, aes(factor(V1))) + geom_bar() + ggtitle('Shared Genes') + labs(x = 'Number of Species', y = 'Number of Genes')
+plot01
 ###*****************************
 
+###*****************************
+#SAVE DATA FRAMES AND FIGURES
 
+for (l in 1:species_number){
+  savedFilename = paste0(species,'_',assembly,'_',date,'/', l, '_species_orthologs_combined_reduced.csv')
+  datafile = get(paste0(l, '_species_orthologs_combined_reduced'))
+  write.csv(datafile, file = savedFilename)
+}
 
+write.csv(gene_occurence_df, file = paste0(species,'_',assembly,'_',date,'/gene_occurence_df.csv'))
+
+ggsave(paste0(species,'_',assembly,'_',date,'/plot01.pdf'), plot = plot01)
+###*****************************
 
 
 
