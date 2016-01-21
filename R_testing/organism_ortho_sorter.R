@@ -30,7 +30,7 @@ library('ggplot2')
 # INITIAL INPUTS
 
 #Species to work on? - bacteroidetes - gilliamella - snogdrassella - unknown -
-species = 'gilliamella'
+species = 'snogdrassella'
 
 #Data OrthoFinder was run? - jan11 - etc -
 date = 'jan11'
@@ -207,17 +207,22 @@ plot01
 #SAVE DATA FRAMES AND FIGURES
 
 for (l in 1:species_number){
-  savedFilename = paste0(species,'_',assembly,'_',date,'/', l, '_species_orthologs_combined_reduced_e.csv')
-  savedFilename_orthologs = paste0(species,'_',assembly,'_',date,'/', l, '_species_orthologs_e.csv')
+  savedFilename = paste0(species,'_results','/', l, '_organism_orthologs_combined_reduced_e.csv')
+  savedFilename_orthologs = paste0(species,'_results','/', l, '_organism_orthologs_e.csv')
   datafile = get(paste0(l, '_species_orthologs_combined_reduced'))
   datafile_orthologs = row.names(datafile)
   write.csv(datafile, file = savedFilename)
   write.csv(datafile_orthologs, file = savedFilename_orthologs)
 }
 
-write.csv(gene_occurence_df, file = paste0(species,'_',assembly,'_',date,'/gene_occurence_df_e.csv'))
+write.csv(gene_occurence_df, file = paste0(species,'_results','/gene_occurence_df_e.csv'))
 
-ggsave(paste0(species,'_',assembly,'_',date,'/plot01_e.pdf'), plot = plot01)
+species_number_list <- data.frame(Number <- c(1:species_number))
+colnames(species_number_list) <- 'organism_number'
+conversion_subset <- cbind(conversion_subset, species_number_list)
+write.csv(conversion_subset, file = paste0(species,'_results','/organism_numers.csv'), row.names = FALSE)
+
+ggsave(paste0(species,'_results','/plot01_e.pdf'), plot = plot01)
 ###*****************************
 
 

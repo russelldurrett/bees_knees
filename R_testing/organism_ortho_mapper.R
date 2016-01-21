@@ -29,7 +29,7 @@ library('ggplot2')
 # INITIAL INPUTS
 
 #Species to work on? - bacteroidetes - gilliamella - snogdrassella - unknown -
-species = 'bacteroidetes'
+species = 'gilliamella'
 
 #Data OrthoFinder was run? - jan11 - etc -
 date = 'jan11'
@@ -103,21 +103,42 @@ name_list <- colnames(organism_list)[1:species_number] #gather all the organism 
 
 #Same as above but more memory efficient apparently because the list does not grow and is the proper size at the start
 organism_listing <- vector(mode='list', length = length(name_list)) #create an empty list of proper length
+names(organism_listing) <- name_list #name the empty slots the organism rast IDs
 for (names1 in name_list){
-  organism_listing1[[names1]] <- organism_list[[names1]] #Append a vector of the the ortholog genes for each organism to the list with its name being that of the organism
+  organism_listing[[names1]] <- organism_list[[names1]] #Append a vector of the the ortholog genes for each organism to the list with its name being that of the organism
 }
 
-common_orthologs <- intersect(organism_list[,1],organism_list[,2])
-common_orthologs <- common_orthologs[!is.na(common_orthologs)]
-n = length(file_list)
-organism_pairs = ((n*(n+1)/2) - n)
+organism_listing <- lapply(organism_listing, function(x) unlist(x[!is.na(x)])) #remove NAs from the lists
 
+nms <- combn( names(organism_listing) , 2 , FUN = paste0 , collapse = "+" , simplify = FALSE )
 
+#for (z in 1:species_number){
+#  rast_id <- toString(conversion_subset[z,1]) #replace the rast_ids with sample_ids for identification purposes going forward
+#  sample_id <- toString(conversion_subset[z,2])
+#  nms <- gsub(rast_id, sample_id, nms)
+#}
+
+organism_listing_comb <- combn( organism_listing , 2 , simplify = FALSE )
+organism_pairs <- lapply( organism_listing_comb , function(x) length( intersect( x[[1]] , x[[2]] ) ) )
+organism_pairs <- setNames( organism_pairs , nms )
+organism_pairs_matrix <- matrix(unlist(organism_pairs), nrow = length(organism_pairs), byrow = TRUE)
+organism_pairs_df <- data.frame(organism_pairs_matrix, stringsAsFactors=FALSE)
+rownames(organism_pairs_df) <- nms #name the rows after the combinations of organisms
+organism_pairs_df <- add_rownames(organism_pairs_df, 'pairs') #move the combination name to a column
+colnames(organism_pairs_df)[2] <- 'shared_counts' #rename the column showing the number of shared genes
 ###*****************************
 
 
+###*****************************
+#CREATE FIGURES
+plot1.1 = ggplot(data = organism_pairs_df, aes(x = pairs, y = shared_counts, fill = pairs)) + geom_bar(stat = 'identity', width = .5, position = position_dodge(width = 2)) + ggtitle('Shared Genes between Organism Pairs') + labs(x = 'Organism Pairs', y = 'Number of Genes Shared') + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + guides(fill=FALSE)
+plot1.1
+plot1.2 = ggplot(data = organism_pairs_df, aes(x = pairs, y = shared_counts, fill = pairs)) + geom_bar(stat = 'identity', width = .9, position = position_dodge(width = 1)) + ggtitle('Shared Genes between Organism Pairs Blended') + labs(x = 'Organism Pairs', y = 'Number of Genes Shared') + theme(axis.text.x=element_blank()) + guides(fill=FALSE)
+plot1.2
+###*****************************
 
-
-
-
-
+###*****************************
+#SAVE DATA FRAMES AND FIGURES
+ggsave(paste0(species,'_results','/plot1.1.pdf'), plot = plot1.1)
+ggsave(paste0(species,'_results','/plot1.2.pdf'), plot = plot1.2)
+###*****************************
