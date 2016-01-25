@@ -2,9 +2,7 @@
 #to an ortholog present in all the organisms in a set. The new fasta files will contain the orthologous genes in the same 
 #order for all organsims.
 
-#Credit to http://www.dalkescientific.com/writings/NBN/parsing.html for help constructing the code
-
-import Bio, sys, os, glob, csv
+import Bio, sys, os, glob, csv, re
 
 '''
 usage: fasta_parser.py fasta_directory, shared_orthologs
@@ -34,16 +32,55 @@ def ortho_list_reader(orthologs):
 	#input the list of orthologs and corresponding genes
 	with open(orthologs, 'rb') as csvfile:
 		ortho_list = csv.reader(csvfile)
-		for row in ortho_list:
-			ortho_list_read ='\n'.join(row)
-			print '\n'.join(row)
+		ortho_list_read = list(ortho_list)
+		#for row in ortho_list:
+		#	ortho_list_read = ortho_list_read.join(row)
+		#	print '\n'.join(row)
 	return ortho_list_read
 
 ortho_list = ortho_list_reader(sys.argv[2])
 
 print ortho_list
 
+def fasta_contstucter(fasta_directory, fasta_list, ortho_list):
+	organism_number = len(fasta_list)
+	for fasta_file in fasta_list:
+		from Bio import SeqIO
+		selected_genes = []
+		filename = ()
+		filename = fasta_directory + fasta_file
+		print filename
+		record_dict = SeqIO.to_dict(SeqIO.parse(filename, 'fasta'))
+		print len(record_dict)
+		for ortholog_gene in ortho_list:
+			ortho = ortholog_gene[1:organism_number+1]
+			print ortho
+			for organism in ortho:
+				print organism
+				match_file = re.search('^.*\.', fasta_file)
+				print match_file.group(0)
+				match_organism = re.search('\d.*\.\d*\.', organism)
+				if match_organism:
+					print match_organism.group(0)
+					if match_organism.group(0) == match_file.group(0):
+						print record_dict[organism].seq
+						sequence = str(record_dict[organism].seq)
+						selected_genes.append(sequence)
+						#print selected_genes
+		#print selected_genes
 
+		amino_acids = ''.join(selected_genes)
+		#print amino_acids
+		save_file = sys.argv[1] + match_file.group(0) + 'txt'
+		text_file = open(save_file, 'w')
+		text_file.write(amino_acids)
+		text_file.close()
+
+
+
+
+
+fasta_contstucter(sys.argv[1], fasta_list, ortho_list)
 
 
 
