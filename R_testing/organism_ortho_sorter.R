@@ -22,6 +22,7 @@ library('plyr')
 library('tidyr')
 library('stringr')
 library('ggplot2')
+library('xlsx')
 ###*****************************
 
 
@@ -30,7 +31,7 @@ library('ggplot2')
 # INITIAL INPUTS
 
 #Species to work on? - bacteroidetes - gilliamella - snogdrassella - unknown -
-species = 'snogdrassella'
+species = 'bacteroidetes'
 
 #Data OrthoFinder was run? - jan11 - etc -
 date = 'jan11'
@@ -44,8 +45,10 @@ assembly = 'masurca'
 #INITIAL DATA SETUP
 
 #upload rast_id, sample_id, species conversion table
-conversion_table = read.csv('rast_ids.csv',
-                            header = TRUE)
+#conversion_table = read.csv('rast_ids.csv',
+#                            header = TRUE)
+
+conversion_table = read.xlsx('rast_ids.xlsx', 1)
 
 #upload orthologs
 filename = paste0(species,'_',assembly,'_',date,'/OrthologousGroups.txt')
@@ -158,7 +161,7 @@ for (x in 1:species_number){
   
   assign(combined_data_frame_r_rn, final_list) #Make a data frame with row names as a column named rn
   
-  rnames_final_list <- final_list$rn # Next 4 lines change the column rn back into row names and saves it
+  rnames_final_list <- final_list$rn # Next lines change the column rn back into row names and saves it
   rownames(final_list) <- rnames_final_list
   final_list$rn <-NULL
   
@@ -171,6 +174,8 @@ for (j in 1:gene_number){ #Remove gene columns, they make the data frame very la
   col_removal = paste0('gene_',j)
   df[col_removal] <-NULL
 }
+
+df1 =  add_rownames(df, 'organisms')
 
 test = ddply(.data=df,.variables=colnames(df),.fun=nrow) #Count and then remove repeated orthologs
 
@@ -222,7 +227,7 @@ colnames(species_number_list) <- 'organism_number'
 conversion_subset <- cbind(conversion_subset, species_number_list)
 write.csv(conversion_subset, file = paste0(species,'_results','/organism_numers.csv'), row.names = FALSE)
 
-ggsave(paste0(species,'_results','/plot01_e.pdf'), plot = plot01)
+ggsave(paste0(species,'_results','/plot01.pdf'), plot = plot01) #Includes shared orthologs that also contain paralogs
 ###*****************************
 
 

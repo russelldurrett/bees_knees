@@ -1,6 +1,5 @@
-
-
-#Requires organism_ortho_sorter.R to be run first
+#Requires organism_ortho_sorter.R to be run first, creates a graph of all pairwise combinations of organisms
+#which shows the number of orthologs they share
 
 ###*****************************
 # INITIAL COMMANDS TO RESET THE SYSTEM
@@ -21,6 +20,7 @@ library('plyr')
 library('tidyr')
 library('stringr')
 library('ggplot2')
+library('xlsx')
 ###*****************************
 
 
@@ -43,8 +43,10 @@ assembly = 'masurca'
 #INITIAL DATA SETUP
 
 #upload rast_id, sample_id, species conversion table
-conversion_table = read.csv('rast_ids.csv',
-                            header = TRUE)
+#conversion_table = read.csv('rast_ids.csv',
+#                            header = TRUE)
+
+conversion_table = read.xlsx('rast_ids.xlsx', 1)
 
 #upload orthologs
 filename = paste0(species,'_',assembly,'_',date,'/OrthologousGroups.txt')
@@ -79,12 +81,12 @@ species_number = nrow(conversion_subset)
 gene_number = ncol(input_groups)
 
 #upload organisms - ortholog data frames and combine
-file_list = list.files(path = paste0(species, '_', assembly, '_', date, '/'), pattern = '\\orthologs_e.csv') #generate list of orthologs per organism files
-organism_list = read.csv(paste0(species, '_', assembly, '_', date, '/', file_list[1]), header = TRUE)
-colnames(organism_list)[2] <- conversion_subset[1,1]
+file_list = list.files(path = paste0(species, '_results', '/'), pattern = '\\orthologs_e.csv') #generate list of orthologs per organism files
+organism_list = read.csv(paste0(species, '_results', '/', file_list[1]), header = TRUE)
+colnames(organism_list)[2] <- toString(conversion_subset[1,1])
 for (i in 2:length(file_list)){
-  temp_org = read.csv(paste0(species, '_', assembly, '_', date, '/', file_list[i]), header = TRUE)
-  colnames(temp_org)[2] <- conversion_subset[i,1]
+  temp_org = read.csv(paste0(species, '_results', '/', file_list[i]), header = TRUE)
+  colnames(temp_org)[2] <- toString(conversion_subset[i,1])
   organism_list <- merge(organism_list, temp_org, by='X', all.x = TRUE, all.y = TRUE)
 }
 organism_list$X = NULL #remove X column used to combine data frames
