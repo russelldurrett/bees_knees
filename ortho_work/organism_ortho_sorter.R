@@ -10,7 +10,7 @@ if (is.integer(dev.list())){dev.off()}
 cat("\014")
 
 #Set working directory
-setwd('/Users/dvanderwood/Github/bees_knees/R_testing/')
+setwd('/Users/dvanderwood/Github/bees_knees/ortho_work/')
 ###*****************************
 
 

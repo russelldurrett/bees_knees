@@ -92,8 +92,7 @@ Velvet For paired-end reads
 					velvetdirectory is the pathway to the proper velvet directory, i.e. /home/user/velvet_1.2.10
 
 
-
-
+Assuming Annotation is run on RAST, download .gbk, .faa, and .fna files.
 
 
 
