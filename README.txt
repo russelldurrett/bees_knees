@@ -92,7 +92,43 @@ Velvet For paired-end reads
 					velvetdirectory is the pathway to the proper velvet directory, i.e. /home/user/velvet_1.2.10
 
 
-Assuming Annotation is run on RAST, download .gbk, .faa, and .fna files.
+***Assuming Annotation is run on RAST, download .faa and .fna files.***
+
+Find orthologous genes in the genomes.
+
+	Run Orthofinder
+		python orthofinder.py -f home/user/species_assembly -t 17
+			-directory which contains the annotated
+			-f is followed by the directory containing the genomes (assembled and annotated)
+			-t is followed by the number of threads to be used
+
+
+Find which orthologs each organism contains
+
+	organism_ortho_sorter.R
+		- Output of orthofinder should be in a folder with the following naming convention "species_assembly_date" 
+			- this will be the input for this program
+			- this will be the case if the organisms are contained in a file named "species_assembly" before orthofinder is run
+		- Construct csv files that show which orthologous genes each organsism contains and a plot showing the number of genes shared
+		  by any number of organisms
+		 -Inputs to be changed
+			- species
+			- date orthofinder was run
+			- which assembly is being used
+
+	organism_ortho_mapper.R
+		
+
+
+fna_parser_gene_constructer.py
+
+ploops.sh
+
+organism_genome_reconstructer_by_species_fnas_phylips.py
+
+Run PhyML
+
+gene_searcher_with_blast.py
 
 
 
