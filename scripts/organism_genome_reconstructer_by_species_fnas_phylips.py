@@ -2,7 +2,7 @@
 #and construct a fna for the entire species containing a genome for each organism. The genome 
 #will be only the previously selected orthologs that have been aligned and trimmed and will be
 #made in the same order for all organisms. The .fna will be constructed so the header is the
-#organism identifier followed by the reconstructed orthologous genome.
+#organism identifier followed by the reconstructed orthologous genome in the Phylip format.
 
 import Bio, sys, os, glob, csv, re
 

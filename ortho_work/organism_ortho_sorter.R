@@ -82,6 +82,8 @@ conversion_subset <- conversion_subset[grep(assembly_delim, conversion_subset$sa
 
 ###*****************************
 #REMOVE PARALOGS FOR EFFICIENCY
+ #This means not every paralog is present for any given ortholog for a specific organism, but it is necessary to cut down on the
+ #run time of the program for large data sets
 species_number = nrow(conversion_subset)
 gene_number = ncol(input_groups)
 
@@ -225,7 +227,7 @@ write.csv(gene_occurence_df, file = paste0(species,'_results','/gene_occurence_d
 species_number_list <- data.frame(Number <- c(1:species_number))
 colnames(species_number_list) <- 'organism_number'
 conversion_subset <- cbind(conversion_subset, species_number_list)
-write.csv(conversion_subset, file = paste0(species,'_results','/organism_numers.csv'), row.names = FALSE)
+write.csv(conversion_subset, file = paste0(species,'_results','/organism_numbers.csv'), row.names = FALSE)
 
 ggsave(paste0(species,'_results','/plot01.pdf'), plot = plot01) #Includes shared orthologs that also contain paralogs
 ###*****************************

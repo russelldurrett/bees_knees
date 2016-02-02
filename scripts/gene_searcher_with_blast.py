@@ -1,11 +1,10 @@
-#This script will take in genomes (fastas or fnas), create a local blast database and then
-#blast against the the database with a given sequence and return all the genes (and by extension
-#organisms) which match (or contain the gene).
+#This script will take in genomes (faas or fnas), create a local blast database and then
+#blast against the the database with a given sequence (in fasta format) and return all the genes (and by extension
+#organisms) which are similar (or contain similar genes).
 
 #Should work on either nucleotide or protein sequences.
 
-#Blast+ commands must be in the PATH variable/local bin and can be called by, for example, merely
-#makeblastdb
+#Blast+ commands must be in the PATH variable/local bin and can be called by, for example, merely by: makeblastdb
 
 import Bio, sys, os, glob, csv, subprocess
 
@@ -15,9 +14,12 @@ usage: gene_searcher_with_blast.py input_directory, output_directory, input_seq
 
 #input_directory = directory containing fnas or faas for all organisms which you wish to search
 #through for the given sequence
+#for example: bacteroidetes_fna/
 #output_directory = directory where you wish to put the constructed blast database and blast
 #search file and conmbined fna file
+#for example: bacteroidetes_search/
 #input_seq = fasta file containing the sequence for which you wish to blast the organisms against
+#for example: carb_metabolism_gene.fasta
 
 from Bio.Blast.Applications import NcbiblastnCommandline
 from Bio.Blast.Applications import NcbiblastpCommandline

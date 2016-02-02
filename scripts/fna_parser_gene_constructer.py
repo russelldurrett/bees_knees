@@ -6,7 +6,7 @@ import Bio, sys, os, glob, csv, re
 '''
 usage: fna_parser_gene_constructer.py fna_directory, shared_orthologs, output_directory
 '''
-#fna_directory =  containing the fasta files you wish to parse
+#fna_directory = directory containing the fasta files you wish to parse
 #for example: bacteroidetes_annotated_fnas/
 #shared_orthologs = output of unique_ortho_finder.R, a matrix containing a list of orthologs (without any paralogs) shared between all the organisms and the list of the genes within each organism
 #for example: bacteroidetes_results/all_organism_orthologs.csv
