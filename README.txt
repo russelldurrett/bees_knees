@@ -198,7 +198,13 @@ Using a given gene, search a group of genomes via blast for similar genes
 				output_directory = directory where you wish to put the constructed blast database and blast search file and conmbined fna file, for example: bacteroidetes_search/
 				input_seq = fasta file containing the sequence for which you wish to blast the organisms against, for example: carb_metabolism_gene.fasta
 
-
+	blast_xml_parser
+		- This script will parse through an xml blast output file and extract all the genes above a certain bitscore and write them out in a new csv file
+		- Arguements for python script:
+			blast_xml_parser.py input_xml, bit_score_cutoff
+				input_xml = xml blast output file to parse
+				bit_score_cutoff = lowest bit score to accept
+			
 
 
 Programs and Packages Used:

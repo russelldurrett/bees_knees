@@ -8,7 +8,7 @@ cd ~/Github/bees_knees/ortho_work/bacteroidetes_gene_fnas
 set files = `ls *.fna`
 
 foreach i ($files)
-	java -jar ~/GitHub/bees_knees/BMGE-1.12/BMGE.jar -i $i -t DNA -of $i".muscle"
+	java -jar ~/GitHub/bees_knees/BMGE-1.12/BMGE.jar -i $i -t DNA -of $i".BMGE"
 
 end
 

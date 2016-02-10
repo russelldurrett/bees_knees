@@ -14,9 +14,9 @@ usage: gene_searcher_with_blast.py input_directory, output_directory, input_seq
 
 #input_directory = directory containing fnas or faas for all organisms which you wish to search
 #through for the given sequence
-#for example: bacteroidetes_fna/
+#for example: bacteroidetes_faa/
 #output_directory = directory where you wish to put the constructed blast database and blast
-#search file and conmbined fna file
+#search file and conmbined fna/faa file
 #for example: bacteroidetes_search/
 #input_seq = fasta file containing the sequence for which you wish to blast the organisms against
 #for example: carb_metabolism_gene.fasta
@@ -75,7 +75,7 @@ def blast_run_protein(output_directory, input_seq):
 	blast_db_p = output_directory + 'combined_blast_db_p'
 	search_name = str.split(input_seq,'.')
 	out_name = search_name[0] + '.xml'
-	blastp_cline = NcbiblastpCommandline(query=input_seq, db=blast_db_p, evalue=.001, outfmt=5, out=out_name)
+	blastp_cline = NcbiblastpCommandline(query=input_seq, db=blast_db_p, evalue=.00001, outfmt=5, out=out_name)
 	blastp_cline
 	print(blastp_cline)
 	stdout, stderr = blastp_cline()
