@@ -15,7 +15,7 @@ de novo genome assembly pipeline using MaSuRCA and Velvet
 	MaSuRCA
 	
 		Copy your sample list into your masurca config folder:
-			cp sample_list.txt ~/path/path/path/masurca_configs
+			cp sample_list.txt ~/path/path/path/masurca
 	
 		Use masurca_config_generator.py to generate config files in your curent directory
 			Arguements for python script:
@@ -208,10 +208,11 @@ Using a given gene, search a group of genomes via blast for similar genes
 
 
 Programs and Packages Used:
- - Working on a OSX environemt
+ - Working in an OSX environemt (linux for assembly and ortholog finding)
  - Python
  - Velvet Assembler
  - MaSuRCA
+ - 
  - Blast+
  - MCL graph clustering algorithm
  - Orthofinder

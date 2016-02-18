@@ -29,7 +29,7 @@ library('xlsx')
 # INITIAL INPUTS
 
 #Species to work on? - bacteroidetes - gilliamella - snogdrassella - unknown -
-species = 'gilliamella'
+species = 'gilliamela'
 
 #Data OrthoFinder was run? - jan11 - etc -
 date = 'jan11'
